@@ -1,4 +1,4 @@
-//Toru
+//Rooter-edi add
 
 import processing.video.*;
 import jp.nyatla.nyar4psg.*;
