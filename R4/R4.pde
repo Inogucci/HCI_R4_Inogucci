@@ -19,10 +19,14 @@ void setup() {
     Fish = loadImage("../data/GoldFish.png");
 }
 
-int xS, yS, x, y;
+int x_accele, y_accele, x = width/2, y = height/2;
 
 void draw()
 {
+    x_accele = (int)random(9);
+    y_accele = (int)random(9);
+    x+=x_accele;
+    y+=y_accele;
     imageMode(CORNER);
     if (cam.available() !=true) {
         return;
@@ -42,5 +46,5 @@ void draw()
         nya.endTransform();
     }
     imageMode(CENTER);
-    image(Fish, width/2, height/2, 50, 100);
+    image(Fish, x, y, 50, 100);
 }
