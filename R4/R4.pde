@@ -19,14 +19,20 @@ void setup() {
     Fish = loadImage("../data/GoldFish.png");
 }
 
-int x_accele, y_accele, x = width/2, y = height/2;
+float x_accele, y_accele;
+int x = width/2, y = height/2;
+double dir,yx;
 
 void draw()
 {
-    x_accele = (int)random(9);
-    y_accele = (int)random(9);
-    x+=x_accele;
-    y+=y_accele;
+    PImage fish1 = Fish;
+    PImage fish2 = Fish;
+    PImage fish3 = Fish;
+    x_accele = random(6.0);
+    y_accele = random(8.0);
+    x+=(int)x_accele;
+    y+=(int)y_accele-3;
+    //dir=Math.atan2(y_accele,x_accele);
     imageMode(CORNER);
     if (cam.available() !=true) {
         return;
@@ -46,5 +52,8 @@ void draw()
         nya.endTransform();
     }
     imageMode(CENTER);
-    image(Fish, x, y, 50, 100);
+    //rotate(radians((float)dir));
+    image(fish1, x, y, 100, 50);
+    image(fish2, x, y, 80, 40);
+    image(fish3, x, y, 150, 80);
 }
