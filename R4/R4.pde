@@ -29,9 +29,6 @@ void setup() {
 
 void draw()
 {
-    imageMode(CENTER);
-    DrawFish(Kingyos);
-
     imageMode(CORNER);
     if (cam.available() !=true) {
         return;
@@ -50,6 +47,9 @@ void draw()
         box(40);
         nya.endTransform();
     }
+    
+    imageMode(CENTER);
+    DrawFish(Kingyos);
 }
 
 public class Fish {
@@ -73,8 +73,8 @@ void MoveFish(Fish fish) {
     int change = second();
     if (change%4==0 && change != fish.randomed) {
         fish.randomed = second();
-        fish.randomx = random(6.0);
-        fish.randomy = random(6.0);;
+        fish.randomx = random(5.0);
+        fish.randomy = random(5.0);;
     }
     fish.x_accele = fish.randomx*fish.p_n_x;
     fish.y_accele = fish.randomy*fish.p_n_y;
@@ -89,14 +89,15 @@ void MoveFish(Fish fish) {
         fish.p_n_x *= -1;
         fish.flag_x=true;
     }
-    if (fish.y>height&&fish.flag_y) { 
+    if (fish.y>height+50&&fish.flag_y) { 
         fish.p_n_y *= -1;
         fish.flag_y=false;
     }
-    if (fish.y<0&&!fish.flag_y) { 
+    if (fish.y<-50&&!fish.flag_y) { 
         fish.p_n_y *= -1;
         fish.flag_y=true;
     }
+    
 }
 
 void TurnFish(Fish fish) {
