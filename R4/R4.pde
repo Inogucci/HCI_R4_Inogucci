@@ -3,7 +3,7 @@
 
 import processing.video.*;
 import jp.nyatla.nyar4psg.*;
-Fish Kingyo;
+Fish Kingyo1, Kingyo2;
 
 Capture cam;
 MultiMarker nya;
@@ -17,17 +17,17 @@ void setup() {
     nya.addARMarker("../data/patt.hiro", 80);//id=0
     nya.addARMarker("../data/patt.kanji", 80);//id=1
     cam.start();
-    Kingyo = new Fish();
-    Kingyo.Sakana = loadImage("../data/GoldFish.png");
+    Kingyo1 = new Fish();
+    Kingyo2 = new Fish();
+    Kingyo1.Sakana = loadImage("../data/GoldFish.png");
+    Kingyo2.Sakana = loadImage("../data/GoldFish.png");
 }
-
-int p_n_x = 1, p_n_y = 1;
-boolean flag_x = true, flag_y = true;
 
 void draw()
 {
-    MoveFish(Kingyo);
-    
+    MoveFish(Kingyo1);
+    MoveFish(Kingyo2);
+
     imageMode(CORNER);
     if (cam.available() !=true) {
         return;
@@ -46,9 +46,19 @@ void draw()
         box(40);
         nya.endTransform();
     }
-    
+
     imageMode(CENTER);
-    image(Kingyo.Sakana, Kingyo.x, Kingyo.y, 100, 50);
+    image(Kingyo1.Sakana, Kingyo1.x, Kingyo1.y, 100, 50);
+    image(Kingyo2.Sakana, Kingyo2.x, Kingyo2.y, 100, 50);
+}
+
+public class Fish {
+    float x_accele, y_accele;
+    int p_n_x = 1, p_n_y = 1;
+    boolean flag_x = true, flag_y = true;
+    PImage Sakana;
+    int x=(int)random((float)width);
+    int y=(int)random((float)height);
 }
 
 void MoveFish(Fish fish) {
@@ -56,7 +66,7 @@ void MoveFish(Fish fish) {
     fish.y_accele = random(6.0)*fish.p_n_y;
     fish.x+=(int)fish.x_accele;
     fish.y+=(int)fish.y_accele;
-    
+
     if (fish.x>width&&fish.flag_x) { 
         fish.p_n_x *= -1;
         fish.flag_x=false;
@@ -73,13 +83,4 @@ void MoveFish(Fish fish) {
         fish.p_n_y *= -1;
         fish.flag_y=true;
     }
-}
-
-public class Fish {
-    float x_accele, y_accele;
-    int p_n_x = 1, p_n_y = 1;
-    boolean flag_x = true, flag_y = true;
-    PImage Sakana;
-    int x=width/2;
-    int y=height/2;
 }
