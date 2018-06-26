@@ -71,7 +71,7 @@ void DrawFish(Fish fish[]) {
 
 void MoveFish(Fish fish) {
     int change = second();
-    if (change%((int)random(10)+1)==0 && change != fish.randomed) {
+    if (change%((int)random(10)+6)==0 && change != fish.randomed) {
         fish.randomed = second();
         fish.randomx = random(5.0);
         fish.randomy = random(5.0);;
