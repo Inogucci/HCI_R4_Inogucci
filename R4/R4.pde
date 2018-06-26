@@ -4,7 +4,7 @@
 import processing.video.*;
 import jp.nyatla.nyar4psg.*;
 
-int _kingyo_num = 5;
+int _kingyo_num = 10;
 Fish[] Kingyos = new Fish[_kingyo_num];
 
 Capture cam;
@@ -71,7 +71,7 @@ void DrawFish(Fish fish[]) {
 
 void MoveFish(Fish fish) {
     int change = second();
-    if (change%4==0 && change != fish.randomed) {
+    if (change%((int)random(10)+1)==0 && change != fish.randomed) {
         fish.randomed = second();
         fish.randomx = random(5.0);
         fish.randomy = random(5.0);;
