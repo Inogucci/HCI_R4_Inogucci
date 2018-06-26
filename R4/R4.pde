@@ -17,6 +17,7 @@ void setup() {
     nya.addARMarker("../data/patt.hiro", 80);//id=0
     nya.addARMarker("../data/patt.kanji", 80);//id=1
     cam.start();
+    Kingyo = new Fish();
     Kingyo.Sakana = loadImage("../data/GoldFish.png");
 }
 
