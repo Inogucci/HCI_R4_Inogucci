@@ -41,7 +41,8 @@ void draw()
         if ((!nya.isExist(i))) {
             continue;
         }
-        println(nya.getMarkerVertex2D(i)[2]);
+        println(nya.getMarkerVertex2D(i)[1].x);
+        println(nya.getMarkerVertex2D(i)[1].y);//1~4
         nya.beginTransform(i);
         fill(0, 100*(i%2), 100*((i+1)%2));
         translate(0, 0, 20);
