@@ -30,7 +30,6 @@ void setup() {
 
 void draw()
 {
-    
     imageMode(CENTER);
     DrawFish(Kingyos);
     
@@ -63,6 +62,13 @@ public class Fish {
     int y=(int)random((float)height);
 }
 
+void DrawFish(Fish fish[]) {
+    for (int i=0; i<_kingyo_num; i++) {
+        MoveFish(fish[i]);
+        TurnFish(fish[i]);
+    }
+}
+
 void MoveFish(Fish fish) {
     fish.x_accele = random(6.0)*fish.p_n_x;
     fish.y_accele = random(6.0)*fish.p_n_y;
@@ -92,12 +98,5 @@ void TurnFish(Fish fish) {
         image(fish.Sakana_r, fish.x, fish.y, 100, 50);
     } else {
         image(fish.Sakana_l, fish.x, fish.y, 100, 50);
-    }
-}
-
-void DrawFish(Fish fish[]) {
-    for (int i=0; i<_kingyo_num; i++) {
-        MoveFish(fish[i]);
-        TurnFish(fish[i]);
     }
 }
