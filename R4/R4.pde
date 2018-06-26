@@ -9,6 +9,7 @@ Capture cam;
 MultiMarker nya;
 
 void setup() {
+    frameRate(60);
     size(640, 480, P3D);
     colorMode(RGB, 100);
     println(MultiMarker.VERSION);  
@@ -27,9 +28,6 @@ void setup() {
 
 void draw()
 {
-    MoveFish(Kingyo1);
-    MoveFish(Kingyo2);
-
     imageMode(CORNER);
     if (cam.available() !=true) {
         return;
@@ -50,19 +48,8 @@ void draw()
     }
 
     imageMode(CENTER);
-    if(Kingyo1.flag_x == true){
-      image(Kingyo1.Sakana_r, Kingyo1.x, Kingyo1.y, 100, 50);
-    }
-    else{
-      image(Kingyo1.Sakana_l, Kingyo1.x, Kingyo1.y, 100, 50);
-    }
-    if(Kingyo2.flag_x == true){
-      image(Kingyo2.Sakana_r, Kingyo2.x, Kingyo2.y, 100, 50);
-    }
-    else{
-      image(Kingyo2.Sakana_l, Kingyo2.x, Kingyo2.y, 100, 50);
-    }
-    
+    DrawFish(Kingyo1);
+    DrawFish(Kingyo2);
 }
 
 public class Fish {
@@ -96,4 +83,18 @@ void MoveFish(Fish fish) {
         fish.p_n_y *= -1;
         fish.flag_y=true;
     }
+}
+
+void TurnFish(Fish fish) {
+    if(fish.flag_x == true){
+      image(Kingyo1.Sakana_r, fish.x, fish.y, 100, 50);
+    }
+    else{
+      image(fish.Sakana_l, fish.x, fish.y, 100, 50);
+    }
+}
+
+void DrawFish(Fish fish) {
+    MoveFish(fish);
+    TurnFish(fish);
 }
