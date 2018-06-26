@@ -3,7 +3,6 @@
 
 import processing.video.*;
 import jp.nyatla.nyar4psg.*;
-Fish Kingyo1, Kingyo2;
 
 int _kingyo_num = 5;
 Fish[] Kingyos = new Fish[_kingyo_num];
@@ -31,6 +30,10 @@ void setup() {
 
 void draw()
 {
+    
+    imageMode(CENTER);
+    DrawFish(Kingyos);
+    
     imageMode(CORNER);
     if (cam.available() !=true) {
         return;
@@ -49,10 +52,6 @@ void draw()
         box(40);
         nya.endTransform();
     }
-
-    imageMode(CENTER);
-
-    DrawFish(Kingyos);
 }
 
 public class Fish {
