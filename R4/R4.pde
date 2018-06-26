@@ -23,8 +23,7 @@ void setup() {
     Kingyos = new Fish[_kingyo_num];
     for (int i=0; i<_kingyo_num; i++) {
         Kingyos[i] = new Fish();
-        Kingyos[i].Sakana_r = loadImage("../data/GoldFish.png");
-        Kingyos[i].Sakana_l = loadImage("../data/GoldFishL.png");
+        Kingyos[i].Sakana = loadImage("../data/GoldFish.png");
     }
 }
 
@@ -32,7 +31,7 @@ void draw()
 {
     imageMode(CENTER);
     DrawFish(Kingyos);
-    
+
     imageMode(CORNER);
     if (cam.available() !=true) {
         return;
@@ -55,9 +54,10 @@ void draw()
 
 public class Fish {
     float x_accele, y_accele;
+    float randomx=3, randomy=3, randomed=1;
     int p_n_x = 1, p_n_y = 1;
     boolean flag_x = true, flag_y = true;
-    PImage Sakana_r, Sakana_l;
+    PImage Sakana;
     int x=(int)random((float)width);
     int y=(int)random((float)height);
 }
@@ -70,8 +70,14 @@ void DrawFish(Fish fish[]) {
 }
 
 void MoveFish(Fish fish) {
-    fish.x_accele = random(6.0)*fish.p_n_x;
-    fish.y_accele = random(6.0)*fish.p_n_y;
+    int change = second();
+    if (change%4==0 && change != fish.randomed) {
+        fish.randomed = second();
+        fish.randomx = random(6.0);
+        fish.randomy = random(6.0);;
+    }
+    fish.x_accele = fish.randomx*fish.p_n_x;
+    fish.y_accele = fish.randomy*fish.p_n_y;
     fish.x+=(int)fish.x_accele;
     fish.y+=(int)fish.y_accele;
 
@@ -94,9 +100,12 @@ void MoveFish(Fish fish) {
 }
 
 void TurnFish(Fish fish) {
-    if (fish.flag_x == true) {
-        image(fish.Sakana_r, fish.x, fish.y, 100, 50);
-    } else {
-        image(fish.Sakana_l, fish.x, fish.y, 100, 50);
-    }
+    int fish_width=100, fish_height=50;
+
+    pushMatrix();
+    translate(fish.x, fish.y);
+    float dim = atan2(-(float)fish.y_accele, (float)fish.x_accele);
+    rotate(-dim);
+    image(fish.Sakana, 0, 0, fish_width, fish_height);
+    popMatrix();
 }
