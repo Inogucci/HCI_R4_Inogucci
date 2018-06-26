@@ -19,8 +19,10 @@ void setup() {
     cam.start();
     Kingyo1 = new Fish();
     Kingyo2 = new Fish();
-    Kingyo1.Sakana = loadImage("../data/GoldFish.png");
-    Kingyo2.Sakana = loadImage("../data/GoldFish.png");
+    Kingyo1.Sakana_r = loadImage("../data/GoldFish.png");
+    Kingyo1.Sakana_l = loadImage("../data/GoldFishL.png");
+    Kingyo2.Sakana_r = loadImage("../data/GoldFish.png");
+    Kingyo2.Sakana_l = loadImage("../data/GoldFishL.png");
 }
 
 void draw()
@@ -48,15 +50,26 @@ void draw()
     }
 
     imageMode(CENTER);
-    image(Kingyo1.Sakana, Kingyo1.x, Kingyo1.y, 100, 50);
-    image(Kingyo2.Sakana, Kingyo2.x, Kingyo2.y, 100, 50);
+    if(Kingyo1.flag_x == true){
+      image(Kingyo1.Sakana_r, Kingyo1.x, Kingyo1.y, 100, 50);
+    }
+    else{
+      image(Kingyo1.Sakana_l, Kingyo1.x, Kingyo1.y, 100, 50);
+    }
+    if(Kingyo2.flag_x == true){
+      image(Kingyo2.Sakana_r, Kingyo2.x, Kingyo2.y, 100, 50);
+    }
+    else{
+      image(Kingyo2.Sakana_l, Kingyo2.x, Kingyo2.y, 100, 50);
+    }
+    
 }
 
 public class Fish {
     float x_accele, y_accele;
     int p_n_x = 1, p_n_y = 1;
     boolean flag_x = true, flag_y = true;
-    PImage Sakana;
+    PImage Sakana_r,Sakana_l;
     int x=(int)random((float)width);
     int y=(int)random((float)height);
 }
@@ -67,11 +80,11 @@ void MoveFish(Fish fish) {
     fish.x+=(int)fish.x_accele;
     fish.y+=(int)fish.y_accele;
 
-    if (fish.x>width&&fish.flag_x) { 
+    if (fish.x>width+50&&fish.flag_x) {
         fish.p_n_x *= -1;
         fish.flag_x=false;
     }
-    if (fish.x<0&&!fish.flag_x) { 
+    if (fish.x<-50&&!fish.flag_x) { 
         fish.p_n_x *= -1;
         fish.flag_x=true;
     }
