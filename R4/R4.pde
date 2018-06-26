@@ -3,7 +3,7 @@
 
 import processing.video.*;
 import jp.nyatla.nyar4psg.*;
-PImage Fish;
+Fish Kingyo;
 
 Capture cam;
 MultiMarker nya;
@@ -15,46 +15,18 @@ void setup() {
     cam=new Capture(this, 640, 480);
     nya=new MultiMarker(this, width, height, "../data/camera_para.dat", NyAR4PsgConfig.CONFIG_PSG);
     nya.addARMarker("../data/patt.hiro", 80);//id=0
-    //nya.addARMarker("../data/patt.kanji",80);//id=1
+    nya.addARMarker("../data/patt.kanji", 80);//id=1
     cam.start();
-    Fish = loadImage("../data/GoldFish.png");
+    Kingyo.Sakana = loadImage("../data/GoldFish.png");
 }
 
-float x_accele, y_accele;
-int x = width/2, y = height/2;
-double dir, yx;
 int p_n_x = 1, p_n_y = 1;
 boolean flag_x = true, flag_y = true;
 
 void draw()
 {
-    PImage fish1 = Fish;
-    PImage fish2 = Fish;
-    PImage fish3 = Fish;
-    x_accele = random(6.0)*p_n_x;
-    y_accele = random(8.0)*p_n_y;
-    x+=(int)x_accele;
-    y+=(int)y_accele;
-    print(flag_y);
-
-    if (x>width&&flag_x) { 
-        p_n_x *= -1;
-        flag_x=false;
-    }
-    if (x<0&&!flag_x) { 
-        p_n_x *= -1;
-        flag_x=true;
-    }
-    if (y>height&&flag_y) { 
-        p_n_y *= -1;
-        flag_y=false;
-    }
-    if (y<0&&!flag_y) { 
-        p_n_y *= -1;
-        flag_y=true;
-    }
-
-    //dir=Math.atan2(y_accele,x_accele);
+    MoveFish(Kingyo);
+    
     imageMode(CORNER);
     if (cam.available() !=true) {
         return;
@@ -73,9 +45,40 @@ void draw()
         box(40);
         nya.endTransform();
     }
+    
     imageMode(CENTER);
-    //rotate(radians((float)dir));
-    image(fish1, x, y, 100, 50);
-    image(fish2, x, y, 80, 40); //What is This
-    image(fish3, x, y, 150, 80); //What is This
+    image(Kingyo.Sakana, Kingyo.x, Kingyo.y, 100, 50);
+}
+
+void MoveFish(Fish fish) {
+    fish.x_accele = random(6.0)*fish.p_n_x;
+    fish.y_accele = random(6.0)*fish.p_n_y;
+    fish.x+=(int)fish.x_accele;
+    fish.y+=(int)fish.y_accele;
+    
+    if (fish.x>width&&fish.flag_x) { 
+        fish.p_n_x *= -1;
+        fish.flag_x=false;
+    }
+    if (fish.x<0&&!fish.flag_x) { 
+        fish.p_n_x *= -1;
+        fish.flag_x=true;
+    }
+    if (fish.y>height&&fish.flag_y) { 
+        fish.p_n_y *= -1;
+        fish.flag_y=false;
+    }
+    if (fish.y<0&&!fish.flag_y) { 
+        fish.p_n_y *= -1;
+        fish.flag_y=true;
+    }
+}
+
+public class Fish {
+    float x_accele, y_accele;
+    int p_n_x = 1, p_n_y = 1;
+    boolean flag_x = true, flag_y = true;
+    PImage Sakana;
+    int x=width/2;
+    int y=height/2;
 }
