@@ -32,7 +32,7 @@ void setup() {
 void draw()
 {
     imageMode(CORNER);
-    if (cam.available() !=true) {
+    if (cam.available() != true) {
         return;
     }
     cam.read();
@@ -40,16 +40,17 @@ void draw()
     background(0);
     nya.drawBackground(cam);
     imageMode(CENTER);
-    DrawFish(Kingyos);
 
     for (int i=0; i<1; i++) {
         if ((!nya.isExist(i))) {
             continue;
         }
         nya.beginTransform(i);
+        noFill();
         DrawPoi(poi);
         nya.endTransform();
     }
+    DrawFish(Kingyos);
 }
 
 public class Fish {
