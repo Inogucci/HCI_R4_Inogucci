@@ -7,10 +7,14 @@ import jp.nyatla.nyar4psg.*;
 int _kingyo_num = 5;
 Fish[] Kingyos = new Fish[_kingyo_num];
 PShape poi, kinpoi;
-PImage Hanarete;
+PImage Hanarete, End;
 
 Capture cam;
 MultiMarker nya;
+int s_m, s_s;
+boolean END = false;
+int A = 0;
+int B = 0;
 
 void setup() {
     frameRate(30);
@@ -30,6 +34,9 @@ void setup() {
     poi = loadShape("../data/poi.obj");
     kinpoi = loadShape("../data/poikingyo.obj");
     Hanarete = loadImage("../data/Hanarete.jpg");
+    End = loadImage("../data/End.jpg");
+    s_m = minute();
+    s_s = second();
 }
 
 void draw()
@@ -49,7 +56,7 @@ void draw()
 }
 
 public class Fish {
-    boolean invisible = true;
+    boolean visible = true;
     float x_accele, y_accele;
     float randomx=3, randomy=3, randomed=1;
     int p_n_x = 1, p_n_y = 1;
@@ -60,7 +67,6 @@ public class Fish {
 }
 
 void DrawPoi(PShape poi) {
-
     lights();
     pushMatrix();
     translate(0, 0, 0);
@@ -115,7 +121,7 @@ void TurnFish(Fish fish) {
     translate(fish.x, fish.y);
     float dim = atan2(-(float)fish.y_accele, (float)fish.x_accele);
     rotate(-dim);
-    if (fish.invisible) {
+    if (fish.visible) {
         image(fish.Sakana, 0, 0, fish_width, fish_height);
     } else {
     }
@@ -125,6 +131,19 @@ void TurnFish(Fish fish) {
 void nyafanc() {
     int[] x = new int[4];
     int[] y = new int[4];
+
+    if (EndGame()) {
+        image(End, width/2, height/2, width-100, height-100);
+        fill(0);
+        textSize(24);
+        if (!END) {
+            A = minute()-s_m;
+            B = second()-s_s;
+            END = true;
+        }
+        text(A + "m" + B + "s", 100, 153);
+        return;
+    }
 
     for (int i=0; i<1; i++) {
         if ((!nya.isExist(i))) {
@@ -141,16 +160,14 @@ void nyafanc() {
         nya.beginTransform(i);
         noFill();
         for (Fish k : Kingyos) {
-            if (x[0] <= k.x && k.x <= x[1]) {
+            if (x[0] <= k.x && k.x <= x[1] && k.visible) {
                 if (y[0] <= k.y && k.y <= y[3]) {
-                    k.invisible = false;
+                    k.visible = false;
                     DrawPoi(kinpoi);
                 } else {
-                    k.invisible = true;
                     DrawPoi(poi);
                 }
             } else {
-                k.invisible = true;
                 DrawPoi(poi);
             }
         }
@@ -164,5 +181,17 @@ boolean OkMarker(int[] x, int[] y) {
         return false;
     } else {
         return true;
+    }
+}
+
+boolean EndGame() {
+    int i=0;
+    for (Fish k : Kingyos) {
+        if (!k.visible) i++;
+    }
+    if (i==_kingyo_num) {
+        return true;
+    } else {
+        return false;
     }
 }
