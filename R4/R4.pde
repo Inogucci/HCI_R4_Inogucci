@@ -4,7 +4,7 @@
 import processing.video.*;
 import jp.nyatla.nyar4psg.*;
 
-int _kingyo_num = 10;
+int _kingyo_num = 5;
 Fish[] Kingyos = new Fish[_kingyo_num];
 PShape poi;
 
