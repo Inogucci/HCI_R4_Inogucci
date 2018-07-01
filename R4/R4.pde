@@ -6,7 +6,7 @@ import jp.nyatla.nyar4psg.*;
 
 int _kingyo_num = 5;
 Fish[] Kingyos = new Fish[_kingyo_num];
-PShape poi, kinpoi;
+PShape poi, kinpoi,kingyo;
 PImage Hanarete, End;
 
 Capture cam;
@@ -33,6 +33,7 @@ void setup() {
     }
     poi = loadShape("../data/poi.obj");
     kinpoi = loadShape("../data/poikingyo.obj");
+    kingyo = loadShape("../data/kingyo.obj");
     Hanarete = loadImage("../data/Hanarete.jpg");
     End = loadImage("../data/End.jpg");
     s_m = minute();
@@ -73,6 +74,16 @@ void DrawPoi(PShape poi) {
     scale(0.4);
     rotateX(90.0);
     shape(poi);
+    popMatrix();
+}
+
+void DrawKingyo(PShape kingyo) {
+    lights();
+    pushMatrix();
+    translate(0, 0, 0);
+    scale(1000.0);
+    rotateX(90.0);
+    shape(kingyo);
     popMatrix();
 }
 
@@ -163,7 +174,8 @@ void nyafanc() {
             if (x[0] <= k.x && k.x <= x[1] && k.visible) {
                 if (y[0] <= k.y && k.y <= y[3]) {
                     k.visible = false;
-                    DrawPoi(kinpoi);
+                    //DrawPoi(kinpoi);
+                    DrawKingyo(kingyo);
                 } else {
                     DrawPoi(poi);
                 }
