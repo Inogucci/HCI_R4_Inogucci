@@ -6,8 +6,8 @@ import jp.nyatla.nyar4psg.*;
 
 int _kingyo_num = 5;
 Fish[] Kingyos = new Fish[_kingyo_num];
-PShape poi, kinpoi,kingyo;
-PImage Hanarete, End;
+PShape poi, kinpoi, kingyo;
+PImage Hanarete, End, Oke;
 
 Capture cam;
 MultiMarker nya;
@@ -36,6 +36,7 @@ void setup() {
     kingyo = loadShape("../data/kingyo.obj");
     Hanarete = loadImage("../data/Hanarete.jpg");
     End = loadImage("../data/End.jpg");
+    Oke = loadImage("../data/Oke.png");
     s_m = minute();
     s_s = second();
 }
@@ -48,8 +49,9 @@ void draw()
     }
     cam.read();
     nya.detect(cam);
-    background(0);
+
     nya.drawBackground(cam);
+    drawOke();
 
     imageMode(CENTER);
     nyafanc();
@@ -57,7 +59,7 @@ void draw()
 }
 
 public class Fish {
-    boolean visible = true;
+    boolean visible = true, onPoi = false;
     float x_accele, y_accele;
     float randomx=3, randomy=3, randomed=1;
     int p_n_x = 1, p_n_y = 1;
@@ -65,6 +67,7 @@ public class Fish {
     PImage Sakana;
     int x=(int)random((float)width);
     int y=(int)random((float)height);
+    int time = (int)random(4) + 3;
 }
 
 void DrawPoi(PShape poi) {
@@ -82,7 +85,7 @@ void DrawKingyo(PShape kingyo) {
     pushMatrix();
     translate(0, 0, 0);
     scale(1000.0);
-    rotateX(90.0);
+    rotateY(90.0);
     shape(kingyo);
     popMatrix();
 }
@@ -149,7 +152,7 @@ void nyafanc() {
         textSize(24);
         if (!END) {
             A = minute()-s_m;
-            B = second()-s_s;
+            B = abs(second()-s_s);
             END = true;
         }
         text(A + "m" + B + "s", 100, 153);
@@ -171,20 +174,33 @@ void nyafanc() {
         nya.beginTransform(i);
         noFill();
         for (Fish k : Kingyos) {
-            if (x[0] <= k.x && k.x <= x[1] && k.visible) {
+            int onPoiSum=0;
+            for (Fish K : Kingyos) {
+                if(K.onPoi)onPoiSum++;
+            }
+            if (x[0] <= k.x && k.x <= x[1] && k.visible && onPoiSum ==0) {
                 if (y[0] <= k.y && k.y <= y[3]) {
                     k.visible = false;
-                    //DrawPoi(kinpoi);
+                    k.onPoi = true;
+                    
                     DrawKingyo(kingyo);
                 } else {
                     DrawPoi(poi);
                 }
+            } else if (k.onPoi) {
+                k.x=(x[0]+x[1])/2;
+                k.y=(y[0]+y[3])/2;
+                DrawKingyo(kingyo);
+                
             } else {
                 DrawPoi(poi);
             }
         }
         nya.endTransform();
     }
+}
+void drawOke() {
+    image(Oke, 0, height-130, 130, 130);
 }
 
 boolean OkMarker(int[] x, int[] y) {
