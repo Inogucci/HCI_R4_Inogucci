@@ -178,7 +178,6 @@ void nyafanc() {
         nya.beginTransform(i);
         noFill();
         for (Fish k : Kingyos) {
-            println(millis()/1000);
             if(BREAK) {
                 DrawPoi(anapoi);
                 continue;
