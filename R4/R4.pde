@@ -40,7 +40,7 @@ void setup() {
     End = loadImage("../data/End.jpg");
     Oke = loadImage("../data/Oke.png");
     s_m = minute();
-    s_s = millis()/1000;
+    s_s = millis()/100;
 }
 
 void draw()
