@@ -6,7 +6,7 @@ import jp.nyatla.nyar4psg.*;
 
 int _kingyo_num = 5;
 Fish[] Kingyos = new Fish[_kingyo_num];
-PShape poi, kinpoi, kingyo;
+PShape poi, kinpoi, kingyo, anapoi;
 PImage Hanarete, End, Oke;
 
 Capture cam;
@@ -15,6 +15,8 @@ int s_m, s_s;
 boolean END = false;
 int A = 0;
 int B = 0;
+int timeout = 5;
+boolean BREAK = false;
 
 void setup() {
     frameRate(30);
@@ -24,7 +26,6 @@ void setup() {
     cam=new Capture(this, 640, 480);
     nya=new MultiMarker(this, width, height, "../data/camera_para.dat", NyAR4PsgConfig.CONFIG_PSG);
     nya.addARMarker("../data/patt.hiro", 80);//id=0
-    nya.addARMarker("../data/patt.kanji", 80);//id=1
     cam.start();
     Kingyos = new Fish[_kingyo_num];
     for (int i=0; i<_kingyo_num; i++) {
@@ -34,11 +35,12 @@ void setup() {
     poi = loadShape("../data/poi.obj");
     kinpoi = loadShape("../data/poikingyo.obj");
     kingyo = loadShape("../data/kingyo.obj");
+    anapoi = loadShape("../data/poi_ana.obj");
     Hanarete = loadImage("../data/Hanarete.jpg");
     End = loadImage("../data/End.jpg");
     Oke = loadImage("../data/Oke.png");
     s_m = minute();
-    s_s = second();
+    s_s = millis()/1000;
 }
 
 void draw()
@@ -60,6 +62,7 @@ void draw()
 
 public class Fish {
     boolean visible = true, onPoi = false;
+    boolean END = false;
     float x_accele, y_accele;
     float randomx=3, randomy=3, randomed=1;
     int p_n_x = 1, p_n_y = 1;
@@ -67,7 +70,8 @@ public class Fish {
     PImage Sakana;
     int x=(int)random((float)width);
     int y=(int)random((float)height);
-    int time = (int)random(4) + 3;
+    int startTime = -1;
+    
 }
 
 void DrawPoi(PShape poi) {
@@ -83,9 +87,9 @@ void DrawPoi(PShape poi) {
 void DrawKingyo(PShape kingyo) {
     lights();
     pushMatrix();
-    translate(0, 0, 0);
+    translate(0, 0, 20);
+    rotateY(80.0);    
     scale(1000.0);
-    rotateY(90.0);
     shape(kingyo);
     popMatrix();
 }
@@ -152,7 +156,7 @@ void nyafanc() {
         textSize(24);
         if (!END) {
             A = minute()-s_m;
-            B = abs(second()-s_s);
+            B = abs(millis()/1000-s_s);
             END = true;
         }
         text(A + "m" + B + "s", 100, 153);
@@ -174,15 +178,28 @@ void nyafanc() {
         nya.beginTransform(i);
         noFill();
         for (Fish k : Kingyos) {
+            println(millis()/1000);
+            if(BREAK) {
+                DrawPoi(anapoi);
+                continue;
+            }
             int onPoiSum=0;
             for (Fish K : Kingyos) {
-                if(K.onPoi)onPoiSum++;
+                if (K.onPoi)onPoiSum++;
+            }
+            if((k.startTime!=-1) && (timeout <= (abs(millis()/1000 - k.startTime)))) {
+                k.visible = false;
+                BREAK = true;
+            }
+            if(OkRelease(x,y) && k.onPoi){
+                k.END = true;
+                k.onPoi = false;
             }
             if (x[0] <= k.x && k.x <= x[1] && k.visible && onPoiSum ==0) {
                 if (y[0] <= k.y && k.y <= y[3]) {
                     k.visible = false;
                     k.onPoi = true;
-                    
+                    k.startTime = millis()/1000;
                     DrawKingyo(kingyo);
                 } else {
                     DrawPoi(poi);
@@ -191,7 +208,6 @@ void nyafanc() {
                 k.x=(x[0]+x[1])/2;
                 k.y=(y[0]+y[3])/2;
                 DrawKingyo(kingyo);
-                
             } else {
                 DrawPoi(poi);
             }
@@ -215,11 +231,23 @@ boolean OkMarker(int[] x, int[] y) {
 boolean EndGame() {
     int i=0;
     for (Fish k : Kingyos) {
-        if (!k.visible) i++;
+        if (k.END) i++;
     }
     if (i==_kingyo_num) {
         return true;
     } else {
         return false;
     }
+}
+
+boolean OkRelease(int[] x, int[] y) {
+    int cx, cy;
+    cx = (x[0]+x[1])/2;
+    cy = (y[1]+y[2])/2;
+    if ( cx>=15 && cx<=115 ) {
+        if ( cy<=height-15 && cy>=height-115 ) {
+            return true;
+        }
+    }
+    return false;
 }
