@@ -84,6 +84,16 @@ void DrawPoi(PShape poi) {
     popMatrix();
 }
 
+void DrawAnaPoi(PShape poi) {
+    lights();
+    pushMatrix();
+    translate(0, 42, 0);
+    scale(0.4);
+    rotateX(90.0);
+    shape(poi);
+    popMatrix();
+}
+
 void DrawKingyo(PShape kingyo) {
     lights();
     pushMatrix();
@@ -179,14 +189,14 @@ void nyafanc() {
         noFill();
         for (Fish k : Kingyos) {
             if(BREAK) {
-                DrawPoi(anapoi);
+                DrawAnaPoi(anapoi);
                 continue;
             }
             int onPoiSum=0;
             for (Fish K : Kingyos) {
                 if (K.onPoi)onPoiSum++;
             }
-            if((k.startTime!=-1) && (timeout <= (abs(millis()/1000 - k.startTime)))) {
+            if(k.onPoi && (k.startTime!=-1) && (timeout <= (abs(millis()/1000 - k.startTime)))) {
                 k.visible = false;
                 BREAK = true;
             }
